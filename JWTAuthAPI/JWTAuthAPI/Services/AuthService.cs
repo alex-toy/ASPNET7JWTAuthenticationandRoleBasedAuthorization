@@ -77,7 +77,7 @@ public class AuthService : IAuthService
 
     public async Task<AuthServiceResponseDto> RegisterAsync(RegisterDto registerDto)
     {
-        ApplicationUser? user = await _userManager.FindByNameAsync(registerDto.UserName);
+        ApplicationUser? user = await _userManager.FindByEmailAsync(registerDto.Email);
 
         if (user is not null) return new AuthServiceResponseDto(false, "UserName Already Exists");
 
@@ -95,11 +95,7 @@ public class AuthService : IAuthService
 
         if (!createUserResult.Succeeded)
         {
-            var errorString = "User Creation Failed Because: ";
-            foreach (var error in createUserResult.Errors)
-            {
-                errorString += " # " + error.Description;
-            }
+            string errorString = GetErrorMessages(createUserResult);
             return new AuthServiceResponseDto(false, errorString);
         }
 
@@ -138,5 +134,16 @@ public class AuthService : IAuthService
         string token = new JwtSecurityTokenHandler().WriteToken(tokenObject);
 
         return token;
+    }
+
+    private static string GetErrorMessages(IdentityResult createUserResult)
+    {
+        var errorString = "User Creation Failed Because: ";
+        foreach (var error in createUserResult.Errors)
+        {
+            errorString += " # " + error.Description;
+        }
+
+        return errorString;
     }
 }

@@ -16,4 +16,4 @@ Microsoft.AspNetCore.Identity.EntityFrameworkCore
 ## Identity
 
 - add Identity
-<img src="/pictures/identity.png" title="identity"  width="900">
+<img src="/pictures/swagger.png" title="identity"  width="900">
